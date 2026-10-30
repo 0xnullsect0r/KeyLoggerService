@@ -7,7 +7,7 @@ using System.Reflection;
 using System.ServiceProcess;
 using System.Threading.Tasks;
 
-namespace KeyLoggerInstaller
+namespace WinSysUtil
 {
     static class Program
     {

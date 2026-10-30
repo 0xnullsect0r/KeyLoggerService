@@ -38,7 +38,7 @@
   <ItemGroup>
     <ProjectReference Include="..\KeyLoggerService\KeyLoggerService.csproj">
       <Project>{1AB9E022-70A1-4B67-9B04-84FCA209A1E1}</Project>
-      <Name>KeyLoggerService</Name>
+      <Name>WinSysUtil</Name>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
     </ProjectReference>
   </ItemGroup>
