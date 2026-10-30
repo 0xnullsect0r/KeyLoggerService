@@ -1,0 +1,119 @@
+name: Build and Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+      # Checkout
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # Setup .NET (handles both SDK-style and old .csproj)
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+
+      # Restore dependencies
+      - name: Restore NuGet packages
+        run: |
+          dotnet restore KeyLoggerInstaller/KeyLoggerInstaller.csproj
+          dotnet restore KeyLoggerService/KeyLoggerService/KeyLoggerService.csproj
+
+      # Build in Release configuration
+      - name: Build Installer
+        run: |
+          dotnet build KeyLoggerInstaller/KeyLoggerInstaller.csproj --configuration Release --no-restore
+
+      - name: Build Service
+        run: |
+          dotnet build KeyLoggerService/KeyLoggerService/KeyLoggerService.csproj --configuration Release --no-restore
+
+      # Determine output paths (.NET SDK puts net48 in subfolder, Framework in root)
+      - name: Discover output paths
+        id: paths
+        shell: pwsh
+        run: |
+          $installerPath = if (Test-Path "KeyLoggerInstaller/bin/Release/net48/") {
+            "KeyLoggerInstaller/bin/Release/net48/*.exe"
+          } elseif (Test-Path "KeyLoggerInstaller/bin/Release/") {
+            "KeyLoggerInstaller/bin/Release/*.exe"
+          } else {
+            throw "Installer build output not found!"
+          }
+          
+          $servicePath = if (Test-Path "KeyLoggerService/KeyLoggerService/bin/Release/net48/") {
+            "KeyLoggerService/KeyLoggerService/bin/Release/net48/*.exe"
+          } elseif (Test-Path "KeyLoggerService/KeyLoggerService/bin/Release/") {
+            "KeyLoggerService/KeyLoggerService/bin/Release/*.exe"
+          } else {
+            throw "Service build output not found!"
+          }
+          
+          echo "INSTALLER_PATH=$installerPath" >> $env:GITHUB_OUTPUT
+          echo "SERVICE_PATH=$servicePath" >> $env:GITHUB_OUTPUT
+          Write-Host "Installer: $installerPath"
+          Write-Host "Service: $servicePath"
+
+      # Create release directory
+      - name: Prepare release assets
+        shell: pwsh
+        run: |
+          $version = "${{ github.ref_name }}" -replace '^v', ''
+          New-Item -ItemType Directory -Force -Path "release-assets/$version"
+          
+          Copy-Item ${{ steps.paths.outputs.INSTALLER_PATH }} "release-assets/$version/" -Force
+          Copy-Item ${{ steps.paths.outputs.SERVICE_PATH }} "release-assets/$version/" -Force
+          
+          if (Test-Path "README.md") {
+            Copy-Item "README.md" "release-assets/$version/" -Force
+          }
+          
+          Get-ChildItem -Recurse "release-assets" | Select-Object FullName
+
+      # Upload artifact for debugging
+      - name: Upload build artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-${{ github.ref_name }}
+          path: release-assets/
+          retention-days: 7
+
+      # Create GitHub Release
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v1
+        if: startsWith(github.ref, 'refs/tags/')
+        with:
+          tag_name: ${{ github.ref_name }}
+          name: ${{ github.ref_name }}
+          body: |
+            ## Release ${{ github.ref_name }}
+            
+            ### Assets:
+            - Installer executable (runs setup)
+            - Service executable (standalone service)
+            
+            ### Build Info:
+            - OS: Windows x64
+            - Framework: .NET Framework 4.8
+            
+            ### Notes:
+            Run installer with Administrator privileges.
+          files: |
+            release-assets/**/*.exe
+            release-assets/README.md
+          draft: false
+          prerelease: false
+
+      # Cleanup artifacts after release
+      - name: Cleanup
+        if: always()
+        shell: pwsh
+        run: |
+          Remove-Item -Recurse -Force release-assets/
